@@ -34,7 +34,7 @@ foreach (var type in jobTypes)
     var triggerName = $"trigger_{i}_{name}";
     var groupName = $"group_{i}_{name}";
 
-    var job = JobBuilder.Create<FetchNewsJob>().WithIdentity(jobName, groupName).Build();
+    var job = JobBuilder.Create(type).WithIdentity(jobName, groupName).Build();
     var trigger = TriggerBuilder.Create()
         .WithIdentity(triggerName, groupName)
         .WithCronSchedule(cronExpression)
