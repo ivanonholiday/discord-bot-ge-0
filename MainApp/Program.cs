@@ -19,15 +19,17 @@ var builder = Host.CreateDefaultBuilder()
 var schedulerFactory = builder.Services.GetRequiredService<ISchedulerFactory>();
 var scheduler = await schedulerFactory.GetScheduler();
 
-const string cronExpression = "0 * * ? * * *"; // every minute
+const string cronExpression1 = "0 * * ? * * *"; // every minute
+const string cronExpression2 = "0 0/10 * ? * * *"; // every 10 minute
 
-var jobTypes = new List<Type>
+var jobTypes = new Dictionary<Type, string>
 {
-    typeof(FetchNewsJob),
+    [typeof(FetchNewsJob)] = cronExpression1,
+    [typeof(FetchCurrentIpJob)] = cronExpression2,
 };
 
 var i = 1;
-foreach (var type in jobTypes)
+foreach (var (type, cronExpression) in jobTypes)
 {
     const string name = nameof(type);
     var jobName = $"job_{i}_{name}";
