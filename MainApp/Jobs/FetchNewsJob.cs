@@ -11,7 +11,7 @@ namespace MainApp.Jobs;
 
 public class FetchNewsJob(DataContext db) : IJob
 {
-    private const string BaseUrl = "https://ge.mangot5.com";
+    private const string BaseUrl = "https://ge.mangot5.com/ge/index";
 
     public async Task Execute(IJobExecutionContext context)
     {
