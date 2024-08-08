@@ -16,6 +16,9 @@ var builder = Host.CreateDefaultBuilder()
     })
     .Build();
 
+var envName = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
+var isDevelopment = !string.IsNullOrWhiteSpace(envName) && envName == "Development";
+
 var schedulerFactory = builder.Services.GetRequiredService<ISchedulerFactory>();
 var scheduler = await schedulerFactory.GetScheduler();
 
@@ -37,10 +40,10 @@ foreach (var (type, cronExpression) in jobTypes)
     var groupName = $"group_{i}_{name}";
 
     var job = JobBuilder.Create(type).WithIdentity(jobName, groupName).Build();
-    var trigger = TriggerBuilder.Create()
-        .WithIdentity(triggerName, groupName)
-        .WithCronSchedule(cronExpression)
-        .Build();
+
+    var trigger = isDevelopment
+        ? TriggerBuilder.Create().WithIdentity(triggerName, groupName).StartNow().Build()
+        : TriggerBuilder.Create().WithIdentity(triggerName, groupName).WithCronSchedule(cronExpression).Build();
 
     await scheduler.ScheduleJob(job, trigger);
     i++;
