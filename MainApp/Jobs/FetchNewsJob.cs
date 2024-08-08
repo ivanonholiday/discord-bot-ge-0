@@ -11,7 +11,7 @@ namespace MainApp.Jobs;
 
 public class FetchNewsJob(DataContext db) : IJob
 {
-    private const string BaseUrl = "https://ge.mangot5.com/ge/index";
+    private const string BaseUrl = "https://ge.mangot5.com";
 
     public async Task Execute(IJobExecutionContext context)
     {
@@ -24,7 +24,7 @@ public class FetchNewsJob(DataContext db) : IJob
     private static async Task Scraping(DataContext db, string webpageUrl)
     {
         var web = new HtmlWeb();
-        var document = await web.LoadFromWebAsync(webpageUrl);
+        var document = await web.LoadFromWebAsync($"{webpageUrl}/ge/index");
 
         const string selector = ".newsinfo-section .tab-content li";
         var items = document.QuerySelectorAll(selector);
