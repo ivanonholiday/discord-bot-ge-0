@@ -47,7 +47,7 @@ public class FetchNewsJob(DataContext db) : IJob
             if (link != null)
             {
                 var url = link.GetAttributeValue("href", "");
-                news.Url = (url.StartsWith("https://") ? "" : BaseUrl) + url;
+                news.Url = (url.StartsWith("https://") ? "" : BaseUrl) + url.Replace("/?", "?");
                 news.Title = link.InnerText.Trim();
 
                 if (!string.IsNullOrWhiteSpace(url))
